@@ -1,0 +1,17 @@
+volumes:
+  database:
+    driver: local
+
+services:
+  db:
+    platform: linux/amd64
+    image: postgres:15 # Use a specific version of Postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=rubberduck
+      - POSTGRES_PASSWORD=rubberduck_master
+      - POSTGRES_DB=rubberduck
+    ports:
+      - '5433:5432' # Expose the Postgres port to your local machine
+    volumes:
+      - database:/var/lib/postgresql/data
