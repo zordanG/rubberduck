@@ -41,33 +41,35 @@ export default function IndexPage() {
 
   return (
     <div>
-      <h1>Usuários</h1>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button onClick={handleAddUser} disabled={loading}>
-          {loading ? 'Adicionando...' : 'Adicionar'}
-        </button>
+      <div className='flex flex-col p-4 border rounded-sm w-fit rounded-sm'>
+        <h1 className='text-lg font-bold'>Usuários</h1>
+        <div className='flex gap-4'>
+          <input
+            type="text"
+            placeholder="Nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className='border p-2'
+          />
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className='border p-2'
+          />
+          <button className='bg-black text-white px-4 rounded-sm' onClick={handleAddUser} disabled={loading}>
+            {loading ? 'Adicionando...' : 'Adicionar'}
+          </button>
+        </div>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              {user.name} — {user.email}
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.name} — {user.email}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }
