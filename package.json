@@ -16,6 +16,8 @@
     "lint": "turbo run lint"
   },
   "devDependencies": {
+    "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
     "prettier": "^3.2.5",
     "prisma": "latest",
     "tsx": "4.21.0",
@@ -26,8 +28,13 @@
   },
   "name": "with-prisma",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/jwt": "^10.0.0",
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "latest"
+    "@prisma/client": "latest",
+    "dotenv": "^17.3.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
   },
   "packageManager": "npm@10.9.0",
   "workspaces": [
