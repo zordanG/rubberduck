@@ -1,10 +1,11 @@
 volumes:
   database:
     driver: local
+  pgadmin_data:
+    driver: local
 
 services:
   db:
-    platform: linux/amd64
     image: postgres:15 # Use a specific version of Postgres
     restart: always
     environment:
@@ -12,6 +13,20 @@ services:
       - POSTGRES_PASSWORD=rubberduck_master
       - POSTGRES_DB=rubberduck
     ports:
-      - '5433:5432' # Expose the Postgres port to your local machine
+      - "5433:5432" # Expose the Postgres port to your local machine
     volumes:
       - database:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: dpage_pgadmin4
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "${PGADMIN_PORT}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
