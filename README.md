@@ -4,10 +4,10 @@ A full-stack monorepo for devs to post and comment on conde, built with Turborep
 
 ## Packages
 
-| Package | Description |
-|---|---|
-| `apps/api` | REST API built with Fastify and Zod |
-| `apps/web` | Frontend built with Next.js |
+| Package             | Description                              |
+| ------------------- | ---------------------------------------- |
+| `apps/api`          | REST API built with Fastify and Zod      |
+| `apps/web`          | Frontend built with Next.js              |
 | `packages/database` | Shared Prisma client and database schema |
 
 ## Requirements
@@ -39,20 +39,20 @@ docker compose up -d
 
 This starts a PostgreSQL 15 instance with the following defaults:
 
-| Setting | Value |
-|---|---|
-| Host | `localhost` |
-| Port | `5433` |
-| Database | `postgres` |
-| User | `postgres` |
-| Password | `postgres_master` |
+| Setting  | Value               |
+| -------- | ------------------- |
+| Host     | `localhost`         |
+| Port     | `5433`              |
+| Database | `rubberduck`        |
+| User     | `rubberduck`        |
+| Password | `rubberduck_master` |
 
 ### 4. Configure environment variables
 
 Create a `.env` file inside `apps/api/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres_master@localhost:5433/postgres
+DATABASE_URL=postgresql://rubberduck:rubberduck_master@localhost:5433/rubberduck
 ```
 
 ### 5. Run database migrations
@@ -75,25 +75,25 @@ npm run dev
 
 This starts all apps in parallel via Turborepo:
 
-| App | URL |
-|---|---|
-| API | http://localhost:3001 |
+| App                | URL                        |
+| ------------------ | -------------------------- |
+| API                | http://localhost:3001      |
 | API Docs (Swagger) | http://localhost:3001/docs |
-| Web | http://localhost:3000 |
+| Web                | http://localhost:3000      |
 
 ## Available Scripts
 
-| Script | Description |
-|---|---|
-| `npm run dev` | Start all apps in development mode |
-| `npm run build` | Build all apps |
-| `npm run lint` | Lint all packages (untested) |
-| `npm run format` | Format all files with Prettier (untested) |
-| `npm run generate` | Generate Prisma client |
-| `npm run db:migrate:dev` | Run database migrations (development) |
-| `npm run db:migrate:deploy` | Run database migrations (production) |
-| `npm run db:push` | Push schema changes without migrations (untested) |
-| `npm run db:seed` | Seed the database (untested) |
+| Script                      | Description                                       |
+| --------------------------- | ------------------------------------------------- |
+| `npm run dev`               | Start all apps in development mode                |
+| `npm run build`             | Build all apps                                    |
+| `npm run lint`              | Lint all packages (untested)                      |
+| `npm run format`            | Format all files with Prettier (untested)         |
+| `npm run generate`          | Generate Prisma client                            |
+| `npm run db:migrate:dev`    | Run database migrations (development)             |
+| `npm run db:migrate:deploy` | Run database migrations (production)              |
+| `npm run db:push`           | Push schema changes without migrations (untested) |
+| `npm run db:seed`           | Seed the database (untested)                      |
 
 ## API Routes
 
