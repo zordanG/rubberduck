@@ -12,6 +12,6 @@ services:
       - POSTGRES_PASSWORD=rubberduck_master
       - POSTGRES_DB=rubberduck
     ports:
-      - '5433:5432' # Expose the Postgres port to your local machine
+      - '5434:5432' # Expose the Postgres port to your local machine
     volumes:
       - database:/var/lib/postgresql/data
