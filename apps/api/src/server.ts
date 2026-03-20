@@ -1,4 +1,5 @@
 // ESM
+<<<<<<< HEAD
 import 'dotenv/config';
 import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
@@ -11,6 +12,15 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+=======
+import '@repo/env';
+import { fastify } from 'fastify'
+import { fastifyCors } from '@fastify/cors'
+import { fastifySwagger } from '@fastify/swagger'
+import { fastifySwaggerUi } from '@fastify/swagger-ui'
+import { routes } from './routes/routes.ts'
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod'
+>>>>>>> 72590eb (chore: configure monorepo env loading with @repo/env package)
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 

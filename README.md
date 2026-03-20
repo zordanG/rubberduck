@@ -1,6 +1,6 @@
 # Rubberduck
 
-A full-stack monorepo for devs to post and comment on conde, built with Turborepo.
+A full-stack monorepo for devs to post and comment on code, built with Turborepo.
 
 ## Packages
 
@@ -31,7 +31,17 @@ cd rubberduck
 npm install
 ```
 
-### 3. Start the database
+### 3. Configure environment variables
+
+Create a `.env` file on root folder:
+
+```env
+DB_PORT=5433
+DATABASE_URL=postgresql://rubberduck:rubberduck_master@localhost:5433/rubberduck
+```
+
+
+### 4. Start the database
 
 ```bash
 docker compose up -d
@@ -42,18 +52,10 @@ This starts a PostgreSQL 15 instance with the following defaults:
 | Setting  | Value               |
 | -------- | ------------------- |
 | Host     | `localhost`         |
-| Port     | `5433`              |
+| Port     | `${DB_PORT}`        |
 | Database | `rubberduck`        |
 | User     | `rubberduck`        |
 | Password | `rubberduck_master` |
-
-### 4. Configure environment variables
-
-Create a `.env` file inside `apps/api/`:
-
-```env
-DATABASE_URL=postgresql://rubberduck:rubberduck_master@localhost:5433/rubberduck
-```
 
 ### 5. Run database migrations
 
