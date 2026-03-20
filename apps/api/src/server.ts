@@ -1,5 +1,5 @@
 // ESM
-import 'dotenv/config';
+import '@repo/env';
 import { fastify } from 'fastify'
 import { fastifyCors } from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'

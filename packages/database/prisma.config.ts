@@ -1,10 +1,5 @@
-import 'dotenv/config';
-import dotenv from 'dotenv';
-import path from 'path';
+import '@repo/env';
 import { defineConfig, env } from 'prisma/config';
-dotenv.config({
-  path: path.normalize('../../apps/api/.env'),
-});
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
