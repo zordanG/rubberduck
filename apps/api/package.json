@@ -12,10 +12,11 @@
   "type": "module",
   "description": "",
   "dependencies": {
-    "@repo/env": "*",
     "@fastify/cors": "^11.2.0",
+    "@fastify/redis": "^7.2.0",
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^5.2.5",
+    "@repo/env": "*",
     "@types/node": "^25.5.0",
     "dotenv": "^17.3.1",
     "fastify": "^5.8.2",
