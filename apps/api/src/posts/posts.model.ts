@@ -1,7 +1,7 @@
+import { create } from 'node:domain';
 import z from 'zod';
 
 export const PostsSchema = z.object({
-    id: z.uuid().optional(),
     title: z.string().max(255),
     slug: z.string()    ,
     language: z.string().max(50),
@@ -9,9 +9,13 @@ export const PostsSchema = z.object({
     description: z.nullish(z.string()),
     view_count: z.int().default(0),
     is_resolved: z.boolean().default(false),
-    created_at: z.coerce.date().optional(),
-    updated_at: z.coerce.date().optional(),
     user_id: z.string()
+})
+
+export const PostsSchemaDb = PostsSchema.extend({
+    id: z.uuid(),
+    created_at: z.date(),
+    updated_at: z.date()
 })
 
 export const PaginationPosts = z.object({
