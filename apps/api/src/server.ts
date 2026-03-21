@@ -19,6 +19,7 @@ import { fastifyCors } from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
 import { routes } from './routes/routes.ts'
+import { fastifyRedis } from '@fastify/redis'
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod'
 >>>>>>> 72590eb (chore: configure monorepo env loading with @repo/env package)
 
@@ -49,6 +50,14 @@ app.register(fastifyCors, {
   origin: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
 });
+
+// Redis
+app.register(fastifyRedis, {
+  host: '127.0.0.1',
+  password: process.env.REDIS_PASS,
+  port: Number(process.env.REDIS_PORT || 6379), // Redis port
+  family: 4   // 4 (IPv4) or 6 (IPv6)
+})
 
 // Routes
 app.register(routes);
