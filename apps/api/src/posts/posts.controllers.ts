@@ -1,5 +1,5 @@
 import { FastifyTypedInstance } from "../types.ts";
-import { PaginationPosts, PostsSchema } from "./posts.model.ts";
+import { PaginationPosts, PostsSchema, PostsSchemaDb } from "./posts.model.ts";
 import z from "zod";
 import { prisma } from "@repo/database";
 
@@ -13,7 +13,7 @@ export default async function routes(app: FastifyTypedInstance){
                 200: z.array(PostsSchema)
             }
         },
-    }, async (request,reply) => {
+    }, async (request, reply) => {
         try {
         const {limit, page} = request.query
         const listPosts = await prisma.posts.findMany({
@@ -27,18 +27,19 @@ export default async function routes(app: FastifyTypedInstance){
         }
     })
 
+    // get para listagem única /posts/:id
+
     app.post("/posts", {
         schema: {
             tags: ['Posts'],
             description: 'Create Post',
-            body: PostsSchema.omit({
-                id: true, created_at: true, updated_at: true
-            }),
+            body: PostsSchema,
             response: {
-                201: PostsSchema,
+                201: PostsSchemaDb,
             },
         }
     }, async (request, reply) => {
+        console.log('cheguei aqui')
         try {
         const {title, slug, language, code, description, user_id} = PostsSchema.parse(request.body)
         const newPost = await prisma.posts.create({
@@ -51,7 +52,6 @@ export default async function routes(app: FastifyTypedInstance){
                 user_id: user_id
             }
         })
-        
         console.log(`Post criado, ${newPost}`)
         return reply.status(201).send(newPost)
         } catch (erro) {
