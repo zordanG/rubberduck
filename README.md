@@ -38,6 +38,9 @@ Create a `.env` file on root folder:
 ```env
 DB_PORT=5433
 DATABASE_URL=postgresql://rubberduck:rubberduck_master@localhost:5433/rubberduck
+PG_USER=rubberduck
+PG_PASS=rubberduck_master
+PG_DB=rubberduck
 ```
 
 
