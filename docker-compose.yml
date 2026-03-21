@@ -9,9 +9,9 @@ services:
     image: postgres:15 # Use a specific version of Postgres
     restart: always
     environment:
-      - POSTGRES_USER=rubberduck
-      - POSTGRES_PASSWORD=rubberduck_master
-      - POSTGRES_DB=rubberduck
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+      - POSTGRES_DB=${PG_DB}
     ports:
       - "${DB_PORT:-5433}:5432" # Expose the Postgres port to your local machine
     volumes:
