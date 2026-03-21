@@ -42,5 +42,7 @@ packages/database/generated/
 dist/
 
 # editor
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
