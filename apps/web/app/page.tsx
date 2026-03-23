@@ -41,7 +41,7 @@ export default function IndexPage() {
 
   return (
     <div>
-      <div className='flex flex-col p-4 border rounded-sm w-fit rounded-sm'>
+      <div className='flex flex-col p-4 border w-fit rounded-sm'>
         <h1 className='text-lg font-bold'>Usuários</h1>
         <div className='flex gap-4'>
           <input
@@ -58,7 +58,7 @@ export default function IndexPage() {
             onChange={(e) => setEmail(e.target.value)}
             className='border p-2'
           />
-          <button className='bg-black text-white px-4 rounded-sm' onClick={handleAddUser} disabled={loading}>
+          <button className='bg-primary text-white px-4 rounded-sm' onClick={handleAddUser} disabled={loading}>
             {loading ? 'Adicionando...' : 'Adicionar'}
           </button>
         </div>
