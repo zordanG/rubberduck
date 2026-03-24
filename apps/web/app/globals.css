@@ -1,1 +1,18 @@
 @import 'tailwindcss';
+
+@theme inline {
+  --color-primary: #121619;
+  --color-secondary: #21272a;
+  --color-tertiary: #ffffff;
+  --color-quaternary: #969fad;
+}
+
+@layer base {
+  * {
+    @apply border-quaternary;
+  }
+  body {
+    @apply bg-primary text-tertiary;
+    color: var(--color-tertiary);
+  }
+}
