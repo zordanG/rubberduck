@@ -43,7 +43,6 @@ PG_PASS=rubberduck_master
 PG_DB=rubberduck
 ```
 
-
 ### 4. Start the database
 
 ```bash

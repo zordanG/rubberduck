@@ -1,10 +1,10 @@
 ## Getting Started
 
 Requirements:
+
 - Node.js 22+
 - PostgreSQL
 - npm
-
 
 Define env variables:
 

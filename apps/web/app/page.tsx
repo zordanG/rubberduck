@@ -25,8 +25,8 @@ export default function IndexPage() {
     if (!name || !email) return;
     setLoading(true);
     await fetch(`${API_URL}/users`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email }),
     });
     setName('');
@@ -47,7 +47,7 @@ export default function IndexPage() {
         <input type='text' placeholder='Nome' value={name} onChange={(e) => setName(e.target.value)} />
         <input type='email' placeholder='E-mail' value={email} onChange={(e) => setEmail(e.target.value)} />
         <button onClick={handleAddUser} disabled={loading}>
-          {loading ? 'Adicionando...' : 'Adicionar'}
+          {loading ? "Adicionando..." : "Adicionar"}
         </button>
       </div>
 
