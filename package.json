@@ -14,10 +14,12 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate": "turbo run generate",
     "lint": "turbo run lint",
-    "prisma:studio": "npm run studio -w @repo/database"
+    "prisma:studio": "npm run studio -w @repo/database",
+    "lint:prettier:check": "prettier --check .",
+    "lint:prettier:fix": "prettier --write ."
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "prettier": "^3.8.1",
     "prisma": "latest",
     "tsx": "4.21.0",
     "turbo": "^2.8.17"
