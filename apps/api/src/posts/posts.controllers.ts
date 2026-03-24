@@ -2,7 +2,6 @@ import { FastifyTypedInstance } from "../types.ts";
 import { PaginationPosts, PostsSchema, PostsSchemaDb } from "./posts.model.ts";
 import z from "zod";
 import { prisma } from "@repo/database";
-import { request } from "node:http";
 
 export default async function routes(app: FastifyTypedInstance){
     app.get('/posts', {
@@ -33,24 +32,24 @@ export default async function routes(app: FastifyTypedInstance){
         schema: {
             tags: ['Posts'],
             description: 'Get Post for id',
+            params: PostsSchemaDb.pick({id: true}),    
             response: {
-                200: PostsSchemaDb
-            }
+                200: PostsSchemaDb,
+                404: z.object({
+                    message: z.string(),
+                }),
+            },
         },
     }, async (request, reply) => {
-        try {
-        const { id }= request.params as {id: string}
+        const { id }= request.params
 
         const post = await prisma.posts.findUnique({
             where: { id: id},
         })
         if(!post) {
-            throw new Error('Post não encontrado')
+            return reply.status(404).send({message: 'Posts not found'})
         }
         return reply.status(200).send(post)
-        } catch (erro){
-            console.log(erro)
-        }
     })
 
     app.post('/posts', {
@@ -76,7 +75,7 @@ export default async function routes(app: FastifyTypedInstance){
                 user_id: user_id
             }
         })
-        console.log(`Post criado, ${newPost.id}`)
+        
         return reply.status(201).send(newPost)
         } catch (erro) {
             console.log(erro)
