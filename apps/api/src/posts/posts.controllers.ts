@@ -3,82 +3,110 @@ import { PaginationPosts, PostsSchema, PostsSchemaDb } from "./posts.model.ts";
 import z from "zod";
 import { prisma } from "@repo/database";
 
-export default async function routes(app: FastifyTypedInstance){
-    app.get('/posts', {
-        schema: {
-            tags: ['Posts'],
-            description: 'List Posts',
-            querystring: PaginationPosts,
-            response: {
-                200: z.array(PostsSchema)
-            }
+export default async function routes(app: FastifyTypedInstance) {
+  app.get(
+    "/posts",
+    {
+      schema: {
+        tags: ["Posts"],
+        description: "List Posts",
+        querystring: PaginationPosts,
+        response: {
+          200: z.array(PostsSchemaDb),
+          500: z.object({
+            error: z.string(),
+          }),
         },
-    }, async (request, reply) => {
-        try {
-        const {limit, page} = request.query
+      },
+    },
+    async (request, reply) => {
+      try {
+        const { limit, page } = request.query;
         const listPosts = await prisma.posts.findMany({
-            take: limit,
-            skip: (page-1) * limit
-        })
-    
-        return reply.status(200).send(listPosts)
-        } catch (erro) {
-            console.log(erro)
-        }
-    })
+          take: limit,
+          skip: (page - 1) * limit,
+        });
 
-    // get para listagem única /posts/:id
-    app.get('/posts/:id', {
-        schema: {
-            tags: ['Posts'],
-            description: 'Get Post for id',
-            params: PostsSchemaDb.pick({id: true}),    
-            response: {
-                200: PostsSchemaDb,
-                404: z.object({
-                    message: z.string(),
-                }),
-            },
+        return reply.status(200).send(listPosts);
+      } catch (error) {
+        return reply.status(500).send({ error: "Server error" });
+      }
+    },
+  );
+
+  // get para listagem única /posts/:id
+  app.get(
+    "/posts/:id",
+    {
+      schema: {
+        tags: ["Posts"],
+        description: "Get Post for id",
+        params: PostsSchemaDb.pick({ id: true }),
+        response: {
+          200: PostsSchemaDb,
+          404: z.object({
+            message: z.string(),
+          }),
+          500: z.object({
+            error: z.string(),
+          }),
         },
-    }, async (request, reply) => {
-        const { id }= request.params
+      },
+    },
+    async (request, reply) => {
+      try {
+        const { id } = request.params;
 
         const post = await prisma.posts.findUnique({
-            where: { id: id},
-        })
-        if(!post) {
-            return reply.status(404).send({message: 'Posts not found'})
+          where: { id: id },
+        });
+        if (!post) {
+          return reply.status(404).send({ message: "Posts not found" });
         }
-        return reply.status(200).send(post)
-    })
+        return reply.status(200).send(post);
+      } catch (error) {
+        return reply.status(500).send({ error: "Server error" });
+      }
+    },
+  );
 
-    app.post('/posts', {
-        schema: {
-            tags: ['Posts'],
-            description: 'Create Post',
-            body: PostsSchema,
-            response: {
-                201: PostsSchemaDb,
-            },
-        }
-    }, async (request, reply) => {
-        console.log('cheguei aqui')
-        try {
-        const {title, slug, language, code, description, user_id} = PostsSchema.parse(request.body)
+  app.post(
+    "/posts",
+    {
+      schema: {
+        tags: ["Posts"],
+        description: "Create Post",
+        body: PostsSchema.omit({
+          view_count: true,
+          is_resolved: true,
+        }),
+        response: {
+          201: PostsSchemaDb,
+          500: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      try {
+        const { title, slug, language, code, description, user_id } =
+          PostsSchema.parse(request.body);
         const newPost = await prisma.posts.create({
-            data: {
-                title: title,
-                slug: slug,
-                language: language,
-                code: code,
-                description: description,
-                user_id: user_id
-            }
-        })
-        
-        return reply.status(201).send(newPost)
-        } catch (erro) {
-            console.log(erro)
-        }
-    })
+          data: {
+            title: title,
+            slug: slug,
+            language: language,
+            code: code,
+            description: description,
+            user_id: user_id,
+          },
+        });
+
+        return reply.status(201).send(newPost);
+      } catch (erro) {
+        return reply.status(500).send({ error: "Server error" });
+      }
+    },
+  );
 }
