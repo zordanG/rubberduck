@@ -4,5 +4,5 @@ import path from 'path';
 
 dotenv.config({
   path: path.normalize('../../.env'),
-  quiet: true
+  quiet: true,
 });
