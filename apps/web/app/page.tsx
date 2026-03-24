@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect } from "react";
+'use client';
+import { useState, useEffect } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 type User = {
   id: string;
@@ -11,8 +11,8 @@ type User = {
 
 export default function IndexPage() {
   const [users, setUsers] = useState<User[]>([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function fetchUsers() {
@@ -29,8 +29,8 @@ export default function IndexPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email }),
     });
-    setName("");
-    setEmail("");
+    setName('');
+    setEmail('');
     await fetchUsers();
     setLoading(false);
   }
@@ -44,18 +44,8 @@ export default function IndexPage() {
       <h1>Usuários</h1>
 
       <div>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <input type='text' placeholder='Nome' value={name} onChange={(e) => setName(e.target.value)} />
+        <input type='email' placeholder='E-mail' value={email} onChange={(e) => setEmail(e.target.value)} />
         <button onClick={handleAddUser} disabled={loading}>
           {loading ? "Adicionando..." : "Adicionar"}
         </button>

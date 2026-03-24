@@ -1,6 +1,6 @@
-import type { FastifyTypedInstance } from "../types.ts";
-import z from "zod";
-import { prisma } from "@repo/database";
+import type { FastifyTypedInstance } from '../types.ts';
+import z from 'zod';
+import { prisma } from '@repo/database';
 
 const UserSchema = z.object({
   id: z.string(),
@@ -11,11 +11,11 @@ const UserSchema = z.object({
 
 export default async function routes(app: FastifyTypedInstance) {
   app.get(
-    "/users",
+    '/users',
     {
       schema: {
-        tags: ["Users"],
-        description: "List Users",
+        tags: ['Users'],
+        description: 'List Users',
         response: {
           200: z.array(UserSchema),
         },
@@ -32,11 +32,11 @@ export default async function routes(app: FastifyTypedInstance) {
   );
 
   app.post(
-    "/users",
+    '/users',
     {
       schema: {
-        tags: ["Users"],
-        description: "Create User",
+        tags: ['Users'],
+        description: 'Create User',
         body: UserSchema.pick({ name: true, email: true }),
         response: {
           201: UserSchema,
