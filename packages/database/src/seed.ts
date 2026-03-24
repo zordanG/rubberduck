@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import "dotenv/config";
 import { prisma } from "./client";
 
 import type { User } from "../generated/client";
@@ -25,8 +25,8 @@ const DEFAULT_USERS = [
           create: {
             ...user,
           },
-        })
-      )
+        }),
+      ),
     );
   } catch (error) {
     console.error(error);
