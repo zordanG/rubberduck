@@ -30,9 +30,7 @@
   "name": "with-prisma",
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "latest",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.0.1"
+    "@prisma/client": "latest"
   },
   "packageManager": "npm@10.9.0",
   "workspaces": [
