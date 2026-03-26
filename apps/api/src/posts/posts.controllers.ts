@@ -1,9 +1,49 @@
 import { FastifyTypedInstance } from "../types.ts";
-import { PaginationPosts, PostsSchema, PostsSchemaDb } from "./posts.model.ts";
+import { PostsSchema, PostsSchemaDb } from "./posts.model.ts";
+import { PaginationPosts } from "../utils/pagination.model.ts"
 import z from "zod";
 import { prisma } from "@repo/database";
 
 export default async function routes(app: FastifyTypedInstance) {
+    app.post(
+    "/posts",
+    {
+      schema: {
+        tags: ["Posts"],
+        description: "Create Post",
+        body: PostsSchema.omit({
+          view_count: true,
+          is_resolved: true,
+        }),
+        response: {
+          201: PostsSchemaDb,
+          500: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      try {
+        const { title, slug, language, code, description, user_id } = request.body
+        const newPost = await prisma.posts.create({
+          data: {
+            title: title,
+            slug: slug,
+            language: language,
+            code: code,
+            description: description,
+            user_id: user_id,
+          },
+        });
+
+        return reply.status(201).send(newPost);
+      } catch (erro) {
+        return reply.status(500).send({ error: "Server error" });
+      }
+    },
+  );
+
   app.get(
     "/posts",
     {
@@ -65,46 +105,6 @@ export default async function routes(app: FastifyTypedInstance) {
         }
         return reply.status(200).send(post);
       } catch (error) {
-        return reply.status(500).send({ error: "Server error" });
-      }
-    },
-  );
-
-  app.post(
-    "/posts",
-    {
-      schema: {
-        tags: ["Posts"],
-        description: "Create Post",
-        body: PostsSchema.omit({
-          view_count: true,
-          is_resolved: true,
-        }),
-        response: {
-          201: PostsSchemaDb,
-          500: z.object({
-            error: z.string(),
-          }),
-        },
-      },
-    },
-    async (request, reply) => {
-      try {
-        const { title, slug, language, code, description, user_id } =
-          PostsSchema.parse(request.body);
-        const newPost = await prisma.posts.create({
-          data: {
-            title: title,
-            slug: slug,
-            language: language,
-            code: code,
-            description: description,
-            user_id: user_id,
-          },
-        });
-
-        return reply.status(201).send(newPost);
-      } catch (erro) {
         return reply.status(500).send({ error: "Server error" });
       }
     },
