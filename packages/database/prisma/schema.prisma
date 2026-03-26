@@ -41,10 +41,10 @@ model Comments {
   id String @id @default(uuid())
   content String
   is_best_answer Boolean
-  upvotes Int
-  downvotes Int
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
+  upvotes       Int       @default(0)  
+  downvotes     Int       @default(0)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
 
   post_id String
   posts Posts @relation(fields: [post_id], references: [id])
