@@ -1,4 +1,3 @@
-import { create } from "node:domain";
 import z from "zod";
 
 export const PostsSchema = z.object({
@@ -17,10 +16,3 @@ export const PostsSchemaDb = PostsSchema.extend({
   created_at: z.date(),
   updated_at: z.date(),
 });
-
-export const PaginationPosts = z.object({
-  limit: z.coerce.number(),
-  page: z.coerce.number(),
-});
-
-type PaginationPosts = z.infer<typeof PaginationPosts>;
