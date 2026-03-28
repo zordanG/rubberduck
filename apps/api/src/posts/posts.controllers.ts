@@ -1,8 +1,9 @@
 import { FastifyTypedInstance } from "../types.ts";
 import { PostsSchema, PostsSchemaDb } from "./posts.model.ts";
 import { PaginationPosts } from "../utils/pagination.model.ts"
-import z from "zod";
+import z, { int } from "zod";
 import { prisma } from "@repo/database";
+import { meta } from "zod/v4/core";
 
 export default async function routes(app: FastifyTypedInstance) {
     app.post(
@@ -52,7 +53,11 @@ export default async function routes(app: FastifyTypedInstance) {
         description: "List Posts",
         querystring: PaginationPosts,
         response: {
-          200: z.array(PostsSchemaDb),
+          200: z.object({
+            itens: z.array(PostsSchemaDb),
+            totalItens: z.int(),
+            totalPages: z.int()
+          }),
           500: z.object({
             error: z.string(),
           }),
@@ -62,12 +67,16 @@ export default async function routes(app: FastifyTypedInstance) {
     async (request, reply) => {
       try {
         const { limit, page } = request.query;
-        const listPosts = await prisma.posts.findMany({
+
+        const [listPosts, postTotal ] = await prisma.$transaction([
+          prisma.posts.findMany({
           take: limit,
           skip: (page - 1) * limit,
-        });
+          }),
+          prisma.posts.count()
+        ]) 
 
-        return reply.status(200).send(listPosts);
+        return reply.status(200).send({itens: listPosts, totalItens: postTotal, totalPages: Math.ceil((postTotal/limit))});
       } catch (error) {
         return reply.status(500).send({ error: "Server error" });
       }
