@@ -3,7 +3,6 @@ import { CommentsSchemaDb, CommentsSchema } from "./comments.model.ts";
 import { PaginationPosts } from "../utils/pagination.model.ts"
 import  z  from 'zod'
 import { prisma } from "@repo/database";
-import { request } from "node:http";
 
 export default async function route(app: FastifyTypedInstance) {
     app.post('/comments', {
@@ -51,6 +50,7 @@ export default async function route(app: FastifyTypedInstance) {
         }
     }, async (request, reply) => {
         const { limit, page } = request.query
+
         const comments = await prisma.comments.findMany({
             take: limit,
             skip: (page - 1) * limit
