@@ -9,6 +9,8 @@
   --color-secondary: #21272a;
   --color-tertiary: #ffffff;
   --color-quaternary: #969fad;
+  --color-onedark: #282c34;
+  --color-onelight: #fafafa;
 
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
