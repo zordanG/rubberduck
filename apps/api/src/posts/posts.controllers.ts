@@ -1,17 +1,16 @@
-import { FastifyTypedInstance } from "../types.ts";
-import { PostsSchema, PostsSchemaDb } from "./posts.model.ts";
-import { PaginationPosts } from "../utils/pagination.model.ts"
-import z, { int } from "zod";
-import { prisma } from "@repo/database";
-import { meta } from "zod/v4/core";
+import { FastifyTypedInstance } from '../types.ts';
+import { PostsSchema, PostsSchemaDb } from './posts.model.ts';
+import { PaginationPosts } from '../utils/pagination.model.ts';
+import z from 'zod';
+import { prisma } from '@repo/database';
 
 export default async function routes(app: FastifyTypedInstance) {
-    app.post(
-    "/posts",
+  app.post(
+    '/posts',
     {
       schema: {
-        tags: ["Posts"],
-        description: "Create Post",
+        tags: ['Posts'],
+        description: 'Create Post',
         body: PostsSchema.omit({
           view_count: true,
           is_resolved: true,
@@ -26,7 +25,7 @@ export default async function routes(app: FastifyTypedInstance) {
     },
     async (request, reply) => {
       try {
-        const { title, slug, language, code, description, user_id } = request.body
+        const { title, slug, language, code, description, user_id } = request.body;
         const newPost = await prisma.posts.create({
           data: {
             title: title,
@@ -40,23 +39,23 @@ export default async function routes(app: FastifyTypedInstance) {
 
         return reply.status(201).send(newPost);
       } catch (erro) {
-        return reply.status(500).send({ error: "Server error" });
+        return reply.status(500).send({ error: 'Server error' });
       }
     },
   );
 
   app.get(
-    "/posts",
+    '/posts',
     {
       schema: {
-        tags: ["Posts"],
-        description: "List Posts",
+        tags: ['Posts'],
+        description: 'List Posts',
         querystring: PaginationPosts,
         response: {
           200: z.object({
             itens: z.array(PostsSchemaDb),
             totalItens: z.int(),
-            totalPages: z.int()
+            totalPages: z.int(),
           }),
           500: z.object({
             error: z.string(),
@@ -68,7 +67,7 @@ export default async function routes(app: FastifyTypedInstance) {
       try {
         const { limit, page } = request.query;
 
-        const [listPosts, postTotal ] = await prisma.$transaction([
+        const [listPosts, postTotal] = await prisma.$transaction([
           prisma.posts.findMany({
             take: limit,
             skip: (page - 1) * limit,
@@ -77,20 +76,22 @@ export default async function routes(app: FastifyTypedInstance) {
           prisma.posts.count(),
         ]);
 
-        return reply.status(200).send({itens: listPosts, totalItens: postTotal, totalPages: Math.ceil((postTotal/limit))});
+        return reply
+          .status(200)
+          .send({ itens: listPosts, totalItens: postTotal, totalPages: Math.ceil(postTotal / limit) });
       } catch (error) {
-        return reply.status(500).send({ error: "Server error" });
+        return reply.status(500).send({ error: 'Server error' });
       }
     },
   );
 
   // get para listagem única /posts/:id
   app.get(
-    "/posts/:id",
+    '/posts/:id',
     {
       schema: {
-        tags: ["Posts"],
-        description: "Get Post for id",
+        tags: ['Posts'],
+        description: 'Get Post for id',
         params: PostsSchemaDb.pick({ id: true }),
         response: {
           200: PostsSchemaDb,
