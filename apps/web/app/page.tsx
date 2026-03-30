@@ -75,7 +75,7 @@ export default async function IndexPage({ searchParams }: { searchParams: Search
             </CardContent>
 
             <CardFooter className='p-4'>
-              <Link href={`/post/${post.id}`} className='w-full'>
+              <Link href={`/post/${post.slug}`} className='w-full'>
                 <Button variant='custom' size='default' className='w-full'>
                   Ler Mais
                 </Button>
