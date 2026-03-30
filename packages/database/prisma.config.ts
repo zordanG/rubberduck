@@ -1,12 +1,12 @@
-import "@repo/env";
-import { defineConfig, env } from "prisma/config";
+import '@repo/env';
+import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
+  schema: 'prisma/schema.prisma',
   migrations: {
-    path: "prisma/migrations",
+    path: 'prisma/migrations',
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    url: env('DATABASE_URL'),
   },
 });
