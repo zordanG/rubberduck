@@ -8,7 +8,7 @@
     },
     "db:migrate:dev": {
       "cache": false,
-      "persistent": true
+      "persistent": false
     },
     "db:migrate:deploy": {
       "cache": false
@@ -17,16 +17,27 @@
       "cache": false
     },
     "db:seed": {
-      "cache": false
-    },
-    "dev": {
       "cache": false,
-      "persistent": true
+      "dependsOn": ["db:migrate:deploy"]
     },
     "generate": {
       "dependsOn": ["^generate"],
       "cache": false
     },
-    "lint": {}
+    "lint": {},
+
+    "api#dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["api#generate", "@repo/database#db:migrate:dev"]
+    },
+    "web#dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }
