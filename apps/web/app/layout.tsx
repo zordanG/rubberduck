@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className='flex flex-col min-h-screen'>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <Nav />
-          <main className='flex-1 py-16 px-20'>{children}</main>
+          <main className='flex-1 py-8 px-4 sm:py-12 sm:px-8 md:py-16 md:px-20'>{children}</main>
           <Footer />
         </ThemeProvider>
       </body>
