@@ -70,11 +70,12 @@ export default async function routes(app: FastifyTypedInstance) {
 
         const [listPosts, postTotal ] = await prisma.$transaction([
           prisma.posts.findMany({
-          take: limit,
-          skip: (page - 1) * limit,
+            take: limit,
+            skip: (page - 1) * limit,
+            orderBy: { created_at: 'desc' },
           }),
-          prisma.posts.count()
-        ]) 
+          prisma.posts.count(),
+        ]);
 
         return reply.status(200).send({itens: listPosts, totalItens: postTotal, totalPages: Math.ceil((postTotal/limit))});
       } catch (error) {
@@ -110,11 +111,46 @@ export default async function routes(app: FastifyTypedInstance) {
           where: { id: id },
         });
         if (!post) {
-          return reply.status(404).send({ message: "Posts not found" });
+          return reply.status(404).send({ message: 'Posts not found' });
         }
         return reply.status(200).send(post);
       } catch (error) {
-        return reply.status(500).send({ error: "Server error" });
+        return reply.status(500).send({ error: 'Server error' });
+      }
+    },
+  );
+
+  app.get(
+    '/posts/slug/:slug',
+    {
+      schema: {
+        tags: ['Posts'],
+        description: 'Get Post by slug',
+        params: PostsSchemaDb.pick({ slug: true }),
+        response: {
+          200: PostsSchemaDb,
+          404: z.object({
+            message: z.string(),
+          }),
+          500: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      try {
+        const { slug } = request.params;
+
+        const post = await prisma.posts.findUnique({
+          where: { slug },
+        });
+        if (!post) {
+          return reply.status(404).send({ message: 'Post not found' });
+        }
+        return reply.status(200).send(post);
+      } catch (error) {
+        return reply.status(500).send({ error: 'Server error' });
       }
     },
   );
