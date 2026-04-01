@@ -1,26 +1,24 @@
-'use client';
-
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { getPersistedValue, setPersistedValue, removePersistedValue } from '@/lib/storage';
 
-function deleteValue(storageType: Storage.Type, key: string) {
-  removePersistedValue(storageType, key);
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
 }
 
 export function usePersistedState<T>(storageType: Storage.Type, key: string, initialValue: T) {
-  const [state, setState] = useState(initialValue);
+  const state = useSyncExternalStore(
+    subscribe,
+    () => getPersistedValue(storageType, key, initialValue),
+    () => initialValue
+  );
 
-  useEffect(() => {
-    const val = getPersistedValue(storageType, key, initialValue)
-    setState(val);
-  }, [])
-  
-  useEffect(() => {
-    setPersistedValue(storageType, key, state);
-  }, [key, state]);
+  function setState(value: T) {
+    setPersistedValue(storageType, key, value);
+  }
 
   function removeState() {
-    deleteValue(storageType, key);
+    removePersistedValue(storageType, key);
   }
 
   return [state, setState, removeState] as const;
