@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod';
 
 export const PaginationPosts = z.object({
   limit: z.coerce.number().default(5),

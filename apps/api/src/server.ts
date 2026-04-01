@@ -43,7 +43,7 @@ app.register(fastifyCors, {
 
 // Redis
 app.register(fastifyRedis, {
-  host: "127.0.0.1",
+  host: '127.0.0.1',
   password: process.env.REDIS_PASS,
   port: Number(process.env.REDIS_PORT || 6379), // Redis port
   family: 4, // 4 (IPv4) or 6 (IPv6)
@@ -53,7 +53,7 @@ app.register(fastifyRedis, {
 app.register(routes);
 
 // Start server
-app.listen({ port: 3001, host: "0.0.0.0" }, function (err, address) {
+app.listen({ port: 3001, host: '0.0.0.0' }, function (err, address) {
   if (err) {
     app.log.error(err);
     process.exit(1);
