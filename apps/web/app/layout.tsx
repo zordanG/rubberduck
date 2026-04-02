@@ -2,8 +2,8 @@ import './globals.css';
 
 import { Roboto, Geist } from 'next/font/google';
 import type { Metadata } from 'next';
-import { Nav } from './ui/nav';
-import { Footer } from './ui/footer';
+import { Nav } from '../components/nav';
+import { Footer } from '../components/footer';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 
