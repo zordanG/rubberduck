@@ -3,9 +3,6 @@
   "_version": "24.0.0",
 
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-
     "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Error", "ESNext.Iterator", "ESNext.Promise"],
     "module": "nodenext",
     "target": "es2024",
@@ -13,6 +10,9 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16"
+    "moduleResolution": "node16",
+
+    "outDir": "dist",
+    "rootDir": "src"
   }
 }
