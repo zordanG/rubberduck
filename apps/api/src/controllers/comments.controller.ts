@@ -1,5 +1,5 @@
 import { FastifyTypedInstance } from '../types.ts';
-import { CommentsSchemaDb, CommentsSchema } from './comments.model.ts';
+import { CommentsSchemaDb, CommentsSchema } from '../models/comments.model.ts';
 import { PaginationPosts } from '../utils/pagination.model.ts';
 import z from 'zod';
 import { prisma } from '@repo/database';

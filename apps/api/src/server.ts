@@ -43,7 +43,7 @@ app.register(fastifyCors, {
 
 // Redis
 app.register(fastifyRedis, {
-  host: '127.0.0.1',
+  host: process.env.REDIS_HOST,
   password: process.env.REDIS_PASS,
   port: Number(process.env.REDIS_PORT || 6379), // Redis port
   family: 4, // 4 (IPv4) or 6 (IPv6)

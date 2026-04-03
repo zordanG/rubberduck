@@ -11,13 +11,19 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id             String   @id @default(uuid())
+  username       String   @unique
+  email          String   @unique
+  password       String
+  avatar_url     String?
+  reputation     Int      @default(0)
+  provider       String
+  email_verified Boolean  @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
-  post Posts[]
-  comments Comments[]  
+  posts          Posts[]
+  comments       Comments[]
 }
 
 model Posts {

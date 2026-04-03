@@ -1,7 +1,7 @@
 import type { FastifyTypedInstance } from '../types.ts';
-import usersRoutes from './users.ts';
-import postsRoutes from '../posts/posts.controllers.ts';
-import commentRoutes from '../comments/comments.controller.ts';
+import postsRoutes from '../controllers/posts.controllers.ts';
+import commentRoutes from '../controllers/comments.controller.ts';
+import usersRoutes from '../controllers/users.controller.ts';
 
 export async function routes(app: FastifyTypedInstance) {
   await app.register(usersRoutes, { prefix: 'api' });
