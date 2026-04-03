@@ -12,7 +12,9 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import cookie from '@fastify/cookie';
 import errorHandlerPlugin from './plugins/error.pugin.ts';
+import authPlugin from './plugins/auth.plugin.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -28,6 +30,16 @@ app.register(fastifySwagger, {
       description: 'API for capturing and inspecting requests',
       version: '1.0.0',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
   transform: jsonSchemaTransform,
 });
@@ -49,6 +61,15 @@ app.register(fastifyRedis, {
   port: Number(process.env.REDIS_PORT || 6379), // Redis port
   family: 4, // 4 (IPv4) or 6 (IPv6)
 });
+
+// Cookies and JWT
+app.register(cookie, {
+  secret: process.env.COOKIE_SECRET,
+  hook: 'onRequest',
+});
+
+app.register(authPlugin);
+
 // Error Handler
 app.register(errorHandlerPlugin);
 

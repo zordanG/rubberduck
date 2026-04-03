@@ -24,6 +24,44 @@ model User {
 
   posts          Posts[]
   comments       Comments[]
+  sessions       Sessions[]
+}
+
+model Sessions {
+  id            String   @id @default(uuid())
+  user_id       String
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  ip_address    String?
+  user_agent    String?
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  refresh_tokens RefreshTokens?
+
+  @@index([user_id])
+}
+
+model RefreshTokens {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  session_id  String    @unique
+  session     Sessions  @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  expires_at  DateTime
+  created_at  DateTime  @default(now())
+  revoked     Boolean   @default(false)
+}
+
+model ResetPassword {
+  id         String    @id @default(uuid())
+  token      String    @unique
+  email      String
+  expires_at DateTime
+  created_at DateTime  @default(now())
+  used_at    DateTime?
+  invalid    Boolean   @default(false)
+
+  @@index([email])
 }
 
 model Posts {
