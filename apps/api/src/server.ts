@@ -12,6 +12,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import errorHandlerPlugin from './plugins/error.pugin.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -48,6 +49,8 @@ app.register(fastifyRedis, {
   port: Number(process.env.REDIS_PORT || 6379), // Redis port
   family: 4, // 4 (IPv4) or 6 (IPv6)
 });
+// Error Handler
+app.register(errorHandlerPlugin);
 
 // Routes
 app.register(routes);
@@ -55,8 +58,7 @@ app.register(routes);
 // Start server
 app.listen({ port: 3001, host: '0.0.0.0' }, function (err, address) {
   if (err) {
-    app.log.error(err);
+    console.error(err);
     process.exit(1);
   }
-  // console.log("Docs available at /docs")
 });
