@@ -11,13 +11,57 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id             String   @id @default(uuid())
+  username       String   @unique
+  email          String   @unique
+  password       String
+  avatar_url     String?
+  reputation     Int      @default(0)
+  provider       String
+  email_verified Boolean  @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
-  post Posts[]
-  comments Comments[]  
+  posts          Posts[]
+  comments       Comments[]
+  sessions       Sessions[]
+}
+
+model Sessions {
+  id            String   @id @default(uuid())
+  user_id       String
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  ip_address    String?
+  user_agent    String?
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  refresh_tokens RefreshTokens?
+
+  @@index([user_id])
+}
+
+model RefreshTokens {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  session_id  String    @unique
+  session     Sessions  @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  expires_at  DateTime
+  created_at  DateTime  @default(now())
+  revoked     Boolean   @default(false)
+}
+
+model ResetPassword {
+  id         String    @id @default(uuid())
+  token      String    @unique
+  email      String
+  expires_at DateTime
+  created_at DateTime  @default(now())
+  used_at    DateTime?
+  invalid    Boolean   @default(false)
+
+  @@index([email])
 }
 
 model Posts {

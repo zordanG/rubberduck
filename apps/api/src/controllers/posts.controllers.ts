@@ -1,5 +1,5 @@
 import { FastifyTypedInstance } from '../types.ts';
-import { PostsSchema, PostsSchemaDb } from './posts.model.ts';
+import { PostsSchema, PostsSchemaDb } from '../models/posts.model.ts';
 import { PaginationPosts } from '../utils/pagination.model.ts';
 import z from 'zod';
 import { prisma } from '@repo/database';

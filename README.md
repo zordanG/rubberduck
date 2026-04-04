@@ -33,7 +33,7 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env` file on root folder:
+Create a `.env` file on root folder, you can copy from `.env.example`:
 
 ```env
 DB_PORT=5433
@@ -41,6 +41,10 @@ DATABASE_URL=postgresql://rubberduck:rubberduck_master@localhost:5433/rubberduck
 PG_USER=rubberduck
 PG_PASS=rubberduck_master
 PG_DB=rubberduck
+
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASS=rubberduck
 ```
 
 ### 4. Start the database
@@ -58,6 +62,13 @@ This starts a PostgreSQL 15 instance with the following defaults:
 | Database | `rubberduck`        |
 | User     | `rubberduck`        |
 | Password | `rubberduck_master` |
+
+And a Redis instance with the following defaults:
+
+| Setting  | Value           |
+| -------- | --------------- |
+| Port     | `${REDIS_PORT}` |
+| Password | `${REDIS_PASS}` |
 
 ### 5. Run database migrations
 
