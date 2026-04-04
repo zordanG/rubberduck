@@ -13,7 +13,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import cookie from '@fastify/cookie';
-import errorHandlerPlugin from './plugins/error.pugin.ts';
+import errorHandlerPlugin from './plugins/error.plugin.ts';
 import authPlugin from './plugins/auth.plugin.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
