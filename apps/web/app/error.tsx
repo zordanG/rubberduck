@@ -25,7 +25,6 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   }, []);
 
   function reload() {
-    setErrorCount(errorCount + 1);
     reset();
   }
 

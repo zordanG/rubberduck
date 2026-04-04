@@ -12,6 +12,9 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import cookie from '@fastify/cookie';
+import errorHandlerPlugin from './plugins/error.plugin.ts';
+import authPlugin from './plugins/auth.plugin.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -27,6 +30,16 @@ app.register(fastifySwagger, {
       description: 'API for capturing and inspecting requests',
       version: '1.0.0',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
   transform: jsonSchemaTransform,
 });
@@ -43,11 +56,22 @@ app.register(fastifyCors, {
 
 // Redis
 app.register(fastifyRedis, {
-  host: '127.0.0.1',
+  host: process.env.REDIS_HOST,
   password: process.env.REDIS_PASS,
   port: Number(process.env.REDIS_PORT || 6379), // Redis port
   family: 4, // 4 (IPv4) or 6 (IPv6)
 });
+
+// Cookies and JWT
+app.register(cookie, {
+  secret: process.env.COOKIE_SECRET,
+  hook: 'onRequest',
+});
+
+app.register(authPlugin);
+
+// Error Handler
+app.register(errorHandlerPlugin);
 
 // Routes
 app.register(routes);
@@ -55,8 +79,7 @@ app.register(routes);
 // Start server
 app.listen({ port: 3001, host: '0.0.0.0' }, function (err, address) {
   if (err) {
-    app.log.error(err);
+    console.error(err);
     process.exit(1);
   }
-  // console.log("Docs available at /docs")
 });
