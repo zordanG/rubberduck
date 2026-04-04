@@ -30,10 +30,7 @@
   "name": "with-prisma",
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "latest",
-    "dompurify": "^3.3.3",
-    "highlight.js": "^11.11.1",
-    "marked": "^17.0.5"
+    "@prisma/client": "latest"
   },
   "packageManager": "npm@10.9.0",
   "workspaces": [
