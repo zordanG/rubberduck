@@ -1,9 +1,8 @@
 'use client';
 
-import clsx from 'clsx';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -16,20 +15,23 @@ import {
 } from '@/components/ui/drawer';
 import { UserProfile } from '@/components/user-profile';
 import { Settings } from '@/components/settings';
+import { logoutUser } from '@/app/actions/auth';
+import Logo from '../logo';
 
 export function Nav() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logoutUser();
+
+    router.replace('/login');
+  };
 
   return (
     <div className='flex gap-4 justify-between py-4 px-4 sm:px-8 md:px-20 bg-secondary border-b border-quaternary'>
       <div className='flex gap-20 w-full justify-between'>
-        <Link href='./' className='flex gap-2 items-center'>
-          <div className='size-10 bg-tertiary rounded-full' />
-          <div>
-            <label className='block text-2xl font-bold leading-6'>Rubberduck</label>
-            <label className='block text-xs text-right'>for Devs</label>
-          </div>
-        </Link>
+        <Logo />
         <ul className='gap-8 items-center hidden lg:flex mr-4'>
           <li>
             <Link className={`${pathname === '/' ? 'font-bold' : ''}`} href='/'>
@@ -57,13 +59,7 @@ export function Nav() {
           <DrawerContent style={{ width: '100vw' }}>
             <DrawerHeader className='flex flex-row gap-2 items-center justify-between border-b'>
               <DrawerTitle asChild>
-                <Link href='./' className='flex gap-2 items-center'>
-                  <div className='size-10 bg-tertiary rounded-full' />
-                  <div>
-                    <label className='block text-2xl font-bold leading-6'>Rubberduck</label>
-                    <label className='block text-xs text-right'>for Devs</label>
-                  </div>
-                </Link>
+                <Logo />
               </DrawerTitle>
 
               <DrawerClose asChild>
@@ -95,7 +91,9 @@ export function Nav() {
                 <UserProfile showUsername showEmail />
                 <Settings />
               </div>
-              <Button variant='destructive'>Logout</Button>
+              <Button variant='destructive' onClick={handleLogout} className='cursor-pointer'>
+                Logout
+              </Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

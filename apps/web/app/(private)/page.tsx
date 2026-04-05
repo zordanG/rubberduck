@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { dateFormatted } from '@/lib/utils';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { fetchServer } from '@/lib/api';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Post {
   itens: {
@@ -42,9 +43,20 @@ export default async function IndexPage({ searchParams }: { searchParams: Search
   }
 
   const limit = 6;
-  const postsRes = await fetch(`${API_URL}/posts?page=${currentPage}&limit=${limit}`, { cache: 'no-store' });
-  const posts: Post = await postsRes.json();
 
+  const currentPath = `/?page=${currentPage}`;
+
+  const postsRes = await fetchServer(
+    `${API_URL}/posts?page=${currentPage}&limit=${limit}`,
+    { cache: 'no-store' },
+    currentPath,
+  );
+
+  if (!postsRes.ok) {
+    throw new Error(`Falha ao carregar os posts. Status: ${postsRes.status}`);
+  }
+
+  const posts: Post = await postsRes.json();
   const totalPages = posts.totalPages;
 
   if (totalPages > 0 && currentPage > totalPages) {
