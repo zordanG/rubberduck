@@ -43,8 +43,9 @@ ENV NODE_ENV=production
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/node_modules ./node_modules
 
-# Schema do Prisma — necessário para o migrate deploy em runtime
+# Schema e config do Prisma — necessários para o migrate deploy em runtime
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
+COPY --from=builder /app/packages/database/prisma.config.ts ./packages/database/prisma.config.ts
 
 # Client gerado pelo Prisma
 COPY --from=builder /app/packages/database/generated ./packages/database/generated
@@ -52,4 +53,4 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 EXPOSE 3001
 
 # Roda migrations antes de subir o servidor
-CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "cd packages/database && npx prisma migrate deploy && cd /app && node apps/api/dist/server.js"]
