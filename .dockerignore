@@ -1,0 +1,40 @@
+# Dependências — serão reinstaladas no build
+node_modules
+**/node_modules
+
+# Outputs de build
+**/.next
+**/dist
+**/.turbo
+
+# Prisma gerado — será regenerado no build
+**/generated
+
+# Variáveis de ambiente locais
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+**/Dockerfile
+**/.dockerignore
+docker-compose*.yml
