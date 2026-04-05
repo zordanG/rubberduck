@@ -52,4 +52,4 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 EXPOSE 3001
 
 # Roda migrations antes de subir o servidor
-CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]

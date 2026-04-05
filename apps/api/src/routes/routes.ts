@@ -5,6 +5,15 @@ import authRoutes from '../controllers/auth.controller.ts';
 import usersRoutes from '../controllers/users.controller.ts';
 
 export async function routes(app: FastifyTypedInstance) {
+  // Deploy verification
+  app.get('/health', {
+    schema: {
+      hide: true
+    }
+  }, async () => {
+    return { status: 'ok' }
+  })
+
   await app.register(authRoutes, { prefix: 'auth' });
 
   await app.register(async (protectedApp) => {
