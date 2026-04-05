@@ -9,7 +9,6 @@ RUN turbo prune api --docker
 FROM node:22-alpine AS installer
 WORKDIR /app
 
-# Copia apenas os package.json isolados (cache-friendly)
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 
@@ -23,6 +22,10 @@ WORKDIR /app
 COPY --from=installer /app/node_modules ./node_modules
 COPY --from=pruner /app/out/full/ .
 
+# DATABASE_URL fake apenas para satisfazer o prisma.config.ts durante o generate
+# O generate não conecta ao banco — só lê o schema
+ENV DATABASE_URL=postgresql://fake:fake@localhost:5432/fake
+
 # Gera o Prisma Client a partir do schema
 RUN npm run generate -w @repo/database
 
@@ -35,17 +38,12 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Copia apenas o necessário para rodar
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/node_modules ./node_modules
-
-# Schema do Prisma — necessário para o migrate deploy em runtime
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
-
-# Client gerado pelo Prisma
 COPY --from=builder /app/packages/database/generated ./packages/database/generated
 
 EXPOSE 3001
 
-# Roda migrations antes de subir o servidor
-CMD ["sh", "-c", "DATABASE_URL=$DATABASE_URL node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
+# Em runtime o DATABASE_URL real vem das variáveis do Railway
+CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
