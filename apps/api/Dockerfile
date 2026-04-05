@@ -23,6 +23,10 @@ WORKDIR /app
 COPY --from=installer /app/node_modules ./node_modules
 COPY --from=pruner /app/out/full/ .
 
+# DATABASE_URL fake apenas para o prisma generate (não conecta ao banco)
+ARG DATABASE_URL=postgresql://fake:fake@localhost:5432/fake
+ENV DATABASE_URL=$DATABASE_URL
+
 # Gera o Prisma Client a partir do schema
 RUN npm run generate -w @repo/database
 
