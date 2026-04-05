@@ -38,7 +38,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY --from=builder /app/node_modules ./
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/config-env ./packages/config-env
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
 COPY --from=builder /app/packages/database/generated ./packages/database/generated
