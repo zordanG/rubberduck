@@ -42,7 +42,6 @@ ENV NODE_ENV=production
 # Copia apenas o necessário para rodar
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/packages/database/node_modules ./packages/database/node_modules
 
 # Schema do Prisma — necessário para o migrate deploy em runtime
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
