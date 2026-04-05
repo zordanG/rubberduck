@@ -29,7 +29,7 @@ ENV DATABASE_URL=postgresql://fake:fake@localhost:5432/fake
 RUN npm run generate -w @repo/database
 
 # Builda o @repo/database para gerar dist/client.js
-RUN node_modules/.bin/tsup packages/database/src/client.ts --format esm --no-dts --out-dir packages/database/dist
+RUN node_modules/.bin/esbuild packages/database/src/client.ts --bundle=false --format=esm --outfile=packages/database/dist/client.js && ls -la packages/database/dist/
 
 # Compila a API
 RUN npm run build -w api
@@ -52,7 +52,6 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 # package.json do database necessário para o Node resolver o package
 COPY --from=builder /app/packages/database/package.json ./packages/database/package.json
 
-RUN node_modules/.bin/tsup packages/database/src/client.ts --format esm --no-dts --out-dir packages/database/dist && ls -la packages/database/dist/
 # Sobrescreve exports para apontar para dist em produção
 RUN node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('node_modules/@repo/database/package.json'));p.exports={'.':'./dist/client.js'};fs.writeFileSync('node_modules/@repo/database/package.json',JSON.stringify(p,null,2));"
 
