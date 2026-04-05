@@ -18,6 +18,8 @@ import authPlugin from './plugins/auth.plugin.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
+const allowedOrigins = process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',') : ['http://localhost:3000'];
+
 // Zod - Validation
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -50,7 +52,8 @@ app.register(fastifySwaggerUi, {
 
 // Cors
 app.register(fastifyCors, {
-  origin: true,
+  origin: allowedOrigins,
+  credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
 });
 
