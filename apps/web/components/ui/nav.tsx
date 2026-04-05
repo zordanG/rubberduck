@@ -38,6 +38,11 @@ export function Nav() {
               Início
             </Link>
           </li>
+          {/* <li>
+            <Link className={`${pathname === '/post' ? 'font-bold' : ''}`} href='/post'>
+              Ver posts
+            </Link>
+          </li> */}
           <li>
             <Link className={`${pathname === '/post/new' ? 'font-bold' : ''}`} href='/post/new'>
               Criar post
@@ -79,6 +84,11 @@ export function Nav() {
                     Início
                   </Link>
                 </li>
+                {/* <li>
+                  <Link className={`${pathname === '/post' ? 'font-bold' : ''} text-xl`} href='/post'>
+                    Ver posts
+                  </Link>
+                </li> */}
                 <li>
                   <Link className={`${pathname === '/post/new' ? 'font-bold' : ''} text-xl`} href='/post/new'>
                     Criar post
