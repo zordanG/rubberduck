@@ -59,4 +59,4 @@ RUN node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('node_mod
 RUN echo "import { defineConfig } from 'prisma/config'; export default defineConfig({ schema: 'prisma/schema.prisma', migrations: { path: 'prisma/migrations' }, datasource: { url: process.env.DATABASE_URL } });" > packages/database/prisma.config.ts
 EXPOSE 3001
 
-CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js 2>&1"]
