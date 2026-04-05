@@ -13,4 +13,7 @@ export const CommentsSchemaDb = CommentsSchema.extend({
   id: z.uuid(),
   created_at: z.date(),
   updated_at: z.date(),
+  user: z.object({
+      username: z.string(),
+    }).optional(),
 });
