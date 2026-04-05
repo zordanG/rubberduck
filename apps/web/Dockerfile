@@ -7,30 +7,27 @@ RUN turbo prune web --docker
 
 # ─── Stage 2: instalar dependências ──────────────────────────────────────────
 FROM node:22-alpine AS installer
-RUN npm install -g pnpm
 WORKDIR /app
 
 COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 
-RUN pnpm install --frozen-lockfile
+RUN npm ci
 
 # ─── Stage 3: build ───────────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
-RUN npm install -g pnpm
 WORKDIR /app
 
 COPY --from=installer /app/node_modules ./node_modules
-COPY --from=installer /app/apps/web/node_modules ./apps/web/node_modules
 COPY --from=pruner /app/out/full/ .
 
-# Necessário para o output: standalone funcionar corretamente
+# Necessário para o output standalone funcionar corretamente
 ENV NEXT_TELEMETRY_DISABLED=1
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-RUN pnpm --filter web run build
+RUN npm run build -w web
 
 # ─── Stage 4: imagem final (standalone) ──────────────────────────────────────
 FROM node:22-alpine AS runner
