@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src/server.ts --format esm --out-dir dist --no-dts --no-external @repo/env",
+    "build": "tsup src/server.ts --format esm --out-dir dist --no-dts",
     "start": "node dist/server.js"
   },
   "keywords": [],
