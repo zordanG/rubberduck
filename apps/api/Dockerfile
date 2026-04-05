@@ -23,7 +23,6 @@ COPY --from=installer /app/node_modules ./node_modules
 COPY --from=pruner /app/out/full/ .
 
 # DATABASE_URL fake apenas para satisfazer o prisma.config.ts durante o generate
-# O generate não conecta ao banco — só lê o schema
 ENV DATABASE_URL=postgresql://fake:fake@localhost:5432/fake
 
 # Gera o Prisma Client a partir do schema
@@ -43,11 +42,10 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
 COPY --from=builder /app/packages/database/generated ./packages/database/generated
 
-EXPOSE 3001
-
-# Cria um prisma.config.ts mínimo para produção, sem dependências do monorepo
+# Cria prisma.config.ts mínimo para produção, sem dependências do monorepo
 RUN echo "import { defineConfig } from 'prisma/config'; export default defineConfig({ schema: 'prisma/schema.prisma', migrations: { path: 'prisma/migrations' }, datasource: { url: process.env.DATABASE_URL } });" > packages/database/prisma.config.ts
 
-# Em runtime o DATABASE_URL real vem das variáveis do Railway
-CMD ["sh", "-c", "cd packages/database && node_modules/.bin/prisma migrate deploy && cd /app && node apps/api/dist/server.js"]
-# CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
+EXPOSE 3001
+
+# Roda migrate a partir da raiz usando --config para apontar para o config correto
+CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]
