@@ -52,12 +52,12 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 # package.json do database necessário para o Node resolver o package
 COPY --from=builder /app/packages/database/package.json ./packages/database/package.json
 
+RUN node_modules/.bin/tsup packages/database/src/client.ts --format esm --no-dts --out-dir packages/database/dist && ls -la packages/database/dist/
 # Sobrescreve exports para apontar para dist em produção
 RUN node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('node_modules/@repo/database/package.json'));p.exports={'.':'./dist/client.js'};fs.writeFileSync('node_modules/@repo/database/package.json',JSON.stringify(p,null,2));"
 
 # Cria prisma.config.ts mínimo para produção
 RUN echo "import { defineConfig } from 'prisma/config'; export default defineConfig({ schema: 'prisma/schema.prisma', migrations: { path: 'prisma/migrations' }, datasource: { url: process.env.DATABASE_URL } });" > packages/database/prisma.config.ts
-
 EXPOSE 3001
 
 CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]
