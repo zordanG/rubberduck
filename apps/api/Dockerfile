@@ -23,10 +23,6 @@ WORKDIR /app
 COPY --from=installer /app/node_modules ./node_modules
 COPY --from=pruner /app/out/full/ .
 
-# DATABASE_URL fake apenas para o prisma generate (não conecta ao banco)
-ARG DATABASE_URL=postgresql://fake:fake@localhost:5432/fake
-ENV DATABASE_URL=$DATABASE_URL
-
 # Gera o Prisma Client a partir do schema
 RUN npm run generate -w @repo/database
 
@@ -43,9 +39,8 @@ ENV NODE_ENV=production
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/node_modules ./node_modules
 
-# Schema e config do Prisma — necessários para o migrate deploy em runtime
+# Schema do Prisma — necessário para o migrate deploy em runtime
 COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
-COPY --from=builder /app/packages/database/prisma.config.ts ./packages/database/prisma.config.ts
 
 # Client gerado pelo Prisma
 COPY --from=builder /app/packages/database/generated ./packages/database/generated
@@ -53,4 +48,4 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 EXPOSE 3001
 
 # Roda migrations antes de subir o servidor
-CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --config=packages/database/prisma.config.ts && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "DATABASE_URL=$DATABASE_URL node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
