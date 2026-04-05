@@ -6,7 +6,7 @@ import { dateFormatted } from '@/lib/utils';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}/api`;
 
 export interface Post {
   itens: {
