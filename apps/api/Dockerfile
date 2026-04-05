@@ -45,5 +45,9 @@ COPY --from=builder /app/packages/database/generated ./packages/database/generat
 
 EXPOSE 3001
 
+# Cria um prisma.config.ts mínimo para produção, sem dependências do monorepo
+RUN echo "import { defineConfig } from 'prisma/config'; export default defineConfig({ schema: 'prisma/schema.prisma', migrations: { path: 'prisma/migrations' }, datasource: { url: process.env.DATABASE_URL } });" > packages/database/prisma.config.ts
+
 # Em runtime o DATABASE_URL real vem das variáveis do Railway
-CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
+CMD ["sh", "-c", "cd packages/database && node_modules/.bin/prisma migrate deploy && cd /app && node apps/api/dist/server.js"]
+# CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy --schema=packages/database/prisma/schema.prisma && node apps/api/dist/server.js"]
