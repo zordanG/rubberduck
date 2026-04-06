@@ -16,7 +16,8 @@
     "lint": "eslint . --max-warnings 0",
     "prebuild": "npm run generate",
     "predev": "npm run generate",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "build": "tsup src/client.ts --format esm --no-dts --out-dir dist"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",

@@ -3,4 +3,8 @@
  */
 module.exports = {
   reactStrictMode: true,
+  output: 'standalone',
+  turbopack: {
+    root: '../../',
+  },
 };
