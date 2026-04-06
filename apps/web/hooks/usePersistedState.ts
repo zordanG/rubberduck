@@ -10,7 +10,7 @@ export function usePersistedState<T>(storageType: Storage.Type, key: string, ini
   const state = useSyncExternalStore(
     subscribe,
     () => getPersistedValue(storageType, key, initialValue),
-    () => initialValue
+    () => initialValue,
   );
 
   function setState(value: T) {
